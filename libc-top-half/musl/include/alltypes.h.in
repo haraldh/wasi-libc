@@ -50,7 +50,11 @@ TYPEDEF unsigned wint_t;
 TYPEDEF unsigned long wctype_t;
 
 TYPEDEF void * timer_t;
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
 TYPEDEF int clockid_t;
+#else
+TYPEDEF void * clockid_t;
+#endif
 TYPEDEF long clock_t;
 #ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
 STRUCT timeval { time_t tv_sec; suseconds_t tv_usec; };

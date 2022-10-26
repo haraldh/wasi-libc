@@ -1,5 +1,9 @@
 #include "pthread_impl.h"
 
+#ifndef __wasilibc_unmodified_upstream
+#include <common/clock.h>
+#endif
+
 int pthread_attr_getdetachstate(const pthread_attr_t *a, int *state)
 {
 	*state = a->_a_detach;
@@ -11,6 +15,7 @@ int pthread_attr_getguardsize(const pthread_attr_t *restrict a, size_t *restrict
 	return 0;
 }
 
+#ifdef __wasilibc_unmodified_upstream
 int pthread_attr_getinheritsched(const pthread_attr_t *restrict a, int *restrict inherit)
 {
 	*inherit = a->_a_sched;
@@ -28,6 +33,7 @@ int pthread_attr_getschedpolicy(const pthread_attr_t *restrict a, int *restrict 
 	*policy = a->_a_policy;
 	return 0;
 }
+#endif
 
 int pthread_attr_getscope(const pthread_attr_t *restrict a, int *restrict scope)
 {
@@ -58,7 +64,11 @@ int pthread_barrierattr_getpshared(const pthread_barrierattr_t *restrict a, int 
 
 int pthread_condattr_getclock(const pthread_condattr_t *restrict a, clockid_t *restrict clk)
 {
+#ifdef __wasilibc_unmodified_upstream
 	*clk = a->__attr & 0x7fffffff;
+#else
+	//clk->id = a->__attr & 0x7fffffff;
+#endif
 	return 0;
 }
 
