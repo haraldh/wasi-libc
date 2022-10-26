@@ -1,3 +1,4 @@
+#include "libc.h"
 #include <wasi/api.h>
 extern void __wasm_call_ctors(void);
 extern int __main_void(void);
@@ -7,6 +8,11 @@ extern void __wasm_call_dtors(void);
 // that the `_start` function isn't started more than once.
 static volatile int started = 0;
 
+static void dummy_0()
+{
+}
+weak_alias(dummy_0, __wasi_init_tp);
+
 __attribute__((export_name("_start")))
 void _start(void) {
     // Don't allow the program to be called multiple times.
@@ -14,6 +20,8 @@ void _start(void) {
 	__builtin_trap();
     }
     started = 1;
+
+	__wasi_init_tp();
 
     // The linker synthesizes this to call constructors.
     __wasm_call_ctors();
